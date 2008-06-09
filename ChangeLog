@@ -1,0 +1,42 @@
+2008-06-07  Ali Farhadi <ali@farhadi.ir>
+	* calendar.js: some methods added to handle the calendar more dynamically.
+
+	* calendar.js: direction of calendar can be defined in language files.
+	
+	* calendar.js: fixed bug in keyboard navigation with right to left languages.
+	
+	* calendar.js: fixed bug in parseDate function with hours greater that 19.
+
+	* calendar-setup.js: now setup function returns the calendar object.
+
+	* calendar-setup.js: cache parameter removed.
+
+2008-06-03  Ali Farhadi <ali@farhadi.ir>
+	JalaliJSCalendar project started based on code from Mihai Bazon (http://dynarch.com/mishoo/)
+	Folders are restructured.
+	Examples are rewritten.
+	
+	* calendar.php: removed.
+
+	* calendar.js: Totally rewritten with UTC functions.
+	since using local functions when DST is active will produce some bugs, I replaced the functions with UTC alternatives.
+
+	* calendar.js: "am" and "pm" Strings moved to language files.
+
+	* calendar.js: parseDate method is rewritten because it was very buggy.
+
+	* calendar.js: setFullYear patch replaced with _CalSetFullYear function.
+	Since we should not change original JavaScript functions, I used our custom function instead of changeing the original one.
+
+	* calendar.js: dateType property added to Calendar class.
+
+	* calendar.js: langNumbers property added to Calendar class.
+	Number characters can be defined in language files.
+	
+	* calendar-setup.js: dateType property added to setup parameters.
+
+	* calendar-setup.js: langNumbers property added to setup parameters.
+
+	* calendar-setup.js: fixed bug on creating a flat calendar with hidden input.
+	
+	* jalali.js: Jalali Extensions for Date Object.

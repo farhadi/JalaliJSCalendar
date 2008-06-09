@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+		<title>JalalJSCalendar :: Dynamic Example</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    <link rel="stylesheet" type="text/css" media="all" href="../skins/aqua/theme.css" title="Aqua" />
+		<link rel="alternate stylesheet" type="text/css" media="all" href="../skins/calendar-blue.css" title="winter" />
+		<link rel="alternate stylesheet" type="text/css" media="all" href="../skins/calendar-blue2.css" title="blue" />
+		<link rel="alternate stylesheet" type="text/css" media="all" href="../skins/calendar-brown.css" title="summer" />
+		<link rel="alternate stylesheet" type="text/css" media="all" href="../skins/calendar-green.css" title="green" />
+		<link rel="alternate stylesheet" type="text/css" media="all" href="../skins/calendar-win2k-1.css" title="win2k-1" />
+		<link rel="alternate stylesheet" type="text/css" media="all" href="../skins/calendar-win2k-2.css" title="win2k-2" />
+		<link rel="alternate stylesheet" type="text/css" media="all" href="../skins/calendar-win2k-cold-1.css" title="win2k-cold-1" />
+		<link rel="alternate stylesheet" type="text/css" media="all" href="../skins/calendar-win2k-cold-2.css" title="win2k-cold-2" />
+		<link rel="alternate stylesheet" type="text/css" media="all" href="../skins/calendar-system.css" title="system" />
+	    
+	    
+		<!-- import the Jalali Date Class script -->
+		<script type="text/javascript" src="../jalali.js"></script>
+		
+		<!-- import the calendar script -->
+		<script type="text/javascript" src="../calendar.js"></script>
+		
+		<!-- import the calendar script -->
+		<script type="text/javascript" src="../calendar-setup.js"></script>
+		
+		<!-- import the language module -->
+		<script type="text/javascript" src="../lang/calendar-fa.js"></script>
+		
+<!-- helper script that uses the calendar -->
+<script type="text/javascript">
+
+// code to change the active stylesheet
+if ( !window.XMLHttpRequest )
+	XMLHttpRequest = function(){
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	};
+
+function setActiveStyleSheet(title) {
+  var i, a, main;
+  for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
+    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title")) {
+      a.disabled = true;
+      if(a.getAttribute("title") == title) a.disabled = false;
+    }
+  }
+}
+
+function changeLanguage(lang) {
+	var req = new XMLHttpRequest();
+	req.open('get', '../lang/calendar-'+lang+'.js', true);
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			eval(req.responseText + "\nflatCal.recreate();popupCal.recreate();");
+		}
+	};
+	req.send(null);
+}
+
+function changeType(type) {
+	document.getElementById('popup_calendar').style.display = type == 'flat' ? 'none' : 'block';
+	document.getElementById('flat_calendar').style.display = type == 'flat' ? 'block' : 'none';
+	if (type == 'flat') flatCal.setDate(popupCal.date);
+}
+
+
+function changeDateType(dateType) {
+	flatCal.setDateType(dateType);
+	popupCal.setDateType(dateType);
+	popupCal.params.inputField.value = popupCal.date.print(popupCal.dateFormat, popupCal.dateType, popupCal.langNumbers);
+}
+
+
+function changeLangNumbers(value) {
+	flatCal.setLangNumbers(value);
+	popupCal.setLangNumbers(value);
+}		
+
+function showWeekNumbers(value) {
+	flatCal.setWeekNumbers(value);
+	popupCal.setWeekNumbers(value);
+	
+}
+
+function showOtherMonths(value) {
+	flatCal.setOtherMonths(value);
+	popupCal.setOtherMonths(value);
+}
+
+function changeDateFormat(format) {
+	flatCal.setDateFormat(format);
+	popupCal.setDateFormat(format);
+	popupCal.params.inputField.value = popupCal.date.print(popupCal.dateFormat, popupCal.dateType, popupCal.langNumbers);
+}
+
+function changeShowTime(value) {
+	flatCal.setShowsTime(value);
+	popupCal.setShowsTime(value);
+}
+
+function setTime24(value) {
+	flatCal.setTime24(value);
+	popupCal.setTime24(value);
+}
+</script>
+<style type="text/css">
+label , label * {
+	font-family: sans-serif;
+	font-size: 12px;
+}
+
+</style>		
+		<!-- other languages might be available in the lang directory; please check
+		your distribution archive. -->
+	</head>
+	<body>
+		<div>
+		<label>
+		Theme: 
+		<select onchange="setActiveStyleSheet(this.value);">
+		<option value="Aqua">Aqua</option>
+		<option value="winter">winter</option>
+		<option value="blue">blue</option>
+		<option value="summer">summer</option>
+		<option value="green">green</option>
+		<option value="win2k-1">win2k-1</option>
+		<option value="win2k-2">win2k-2</option>
+		<option value="win2k-cold-1">win2k-cold-1</option>
+		<option value="win2k-cold-2">win2k-cold-2</option>
+		<option value="system">system</option>
+		</select>
+		</label>
+		<br />
+		<label>
+		Language: 
+		<select onchange="changeLanguage(this.value);">
+		<option value="fa">Farsi</option>
+		<option value="en">English</option>
+		</select>
+		</label>
+		<br />
+		<label>
+		Type: 
+		<select onchange="changeType(this.value);">
+		<option value="flat">Flat</option>
+		<option value="popup">Popup</option>
+		</select>
+		</label>
+		<br />
+		<label>
+		Calendar type: 
+		<select onchange="changeDateType(this.value);">
+		<option value="jalali">Jalali</option>
+		<option value="gregorian">Gregorian</option>
+		</select>
+		</label>
+		<br />
+		<label>
+		Date format: <input type="text" onchange="changeDateFormat(this.value);" value="%Y-%m-%d" />
+		</label>
+		<br />
+		<label>
+		Use language numbers: 
+		<select onchange="changeLangNumbers(this.value=='yes');">
+		<option value="no">no</option>
+		<option value="yes">yes</option>
+		</select>
+		</label>
+		<br />
+		<label>
+		Show week numbers: 
+		<select onchange="showWeekNumbers(this.value=='yes');">
+		<option value="no">no</option>
+		<option value="yes">yes</option>
+		</select>
+		</label>
+		<br />
+		<label>
+		Show days from other months: 
+		<select onchange="showOtherMonths(this.value=='yes');">
+		<option value="no">no</option>
+		<option value="yes">yes</option>
+		</select>
+		</label>
+		<br />
+		<label>
+		Show time: 
+		<select onchange="changeShowTime(this.value=='yes');">
+		<option value="no">no</option>
+		<option value="yes">yes</option>
+		</select>
+		</label>
+		<br />
+		<label>
+		Time format: 
+		<select onchange="setTime24(this.value=='24');">
+		<option value="24">24</option>
+		<option value="12">12</option>
+		</select>
+		</label>
+		<br />
+		</div>
+		<div id="popup_calendar" style="display:none;">
+			<input id="date_input_field" type="text" /><img id="date_btn" src="cal.png" style="vertical-align: top;" />
+		</div>
+		<table><tr><td id="flat_calendar"></td></tr></table>
+		
+		<script type="text/javascript">
+			setActiveStyleSheet("Aqua");
+			var flatCal = Calendar.setup({
+				flat           : "flat_calendar",
+				inputField     : "date_input_field",   // id of the input field
+	       		ifFormat       : "%Y-%m-%d",       // format of the input field
+	       		dateType	   : "jalali",
+	       		weekNumbers    : false
+			});
+			var popupCal = Calendar.setup({
+				inputField     : "date_input_field",   // id of the input field
+				button         : "date_btn",   // trigger for the calendar (button ID)
+	       		ifFormat       : "%Y-%m-%d",       // format of the input field
+	       		dateType	   : "jalali",
+	       		weekNumbers    : false
+			});
+		</script>
+
+	</body>
+</html>
