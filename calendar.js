@@ -1698,6 +1698,8 @@ Date.parseDate = function(str, format, dateType) {
 	var hr = 0;
 	var min = 0;
 	var sec = 0;
+	var msec = 0;
+	
 	var a = format.match(/%.|[^%]+/g);
 	for (var i = 0; i < a.length; i++) {
 		if (a[i].charAt(0) == '%') {
@@ -1858,7 +1860,7 @@ Date.parseDate = function(str, format, dateType) {
 	
 	result.setLocalFullYear(true, dateType, y, m, d);
 	
-	result.setUTCHours(hr, min, sec);
+	result.setUTCHours(hr, min, sec, msec);
 	
 	return result;
 }
