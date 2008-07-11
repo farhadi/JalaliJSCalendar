@@ -1,3 +1,17 @@
+-------------------- 1.1 (Stable Release) [2008-07-11] ---------------------
+2008-07-11	Ali Farhadi <ali@farhadi.ir>
+	* calendar.js: Implementation of getJalaliUTCWeekNumber method corrected.
+	
+	* calendar.js: Bug fixed in getJalaliUTCDayOfYear method.
+	
+	* calendar.js: getLocalDay method added and used instead of getDay where needed.
+	
+	* calendar.js: Some bugs fixed in print and _init methods.
+
+	* calendar.js: Some other minor bugs fixed.
+
+	* jalali.js: getJalaliDay and getJalaliUTCDay methods added.
+	
 2008-06-12  Ali Farhadi <ali@farhadi.ir>
 	* calendar.js: parseDate bug fixed (now handles miliseconds correctly).
 	

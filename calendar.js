@@ -1179,34 +1179,18 @@ Calendar.prototype._init = function (firstDayOfWeek, date) {
 	}
 	this.firstDayOfWeek = firstDayOfWeek;
 	this.date = new Date(date);
-	if (this.dateType == 'jalali') {
-		var month = date.getLocalMonth(true, this.dateType);
-		var mday = date.getLocalDate(true, this.dateType);
-		var no_days = date.getLocalMonthDays(this.dateType);
-		// calendar voodoo for computing the first day that would actually be
-		// displayed in the calendar, even if it's from the previous month.
-		// WARNING: this is magic. ;-)
-		date.setJalaliUTCDate(1);
-		var day1 = (date.getDay() - this.firstDayOfWeek) % 7;
-		if (day1 < 0)
-			day1 += 7;
-		date.setJalaliUTCDate(-day1);
-		date.setJalaliUTCDate(date.getJalaliUTCDate() + 1);
-	} else {
-		var month = date.getUTCMonth();
-		var mday = date.getUTCDate();
-		var no_days = date.getUTCMonthDays();
-		// calendar voodoo for computing the first day that would actually be
-		// displayed in the calendar, even if it's from the previous month.
-		// WARNING: this is magic. ;-)
-		date.setUTCDate(1);
-		var day1 = (date.getDay() - this.firstDayOfWeek) % 7;
-		if (day1 < 0)
-			day1 += 7;
-		date.setUTCDate(-day1);
-		date.setUTCDate(date.getUTCDate() + 1);
-	}
-	
+	var month = date.getLocalMonth(true, this.dateType);
+	var mday = date.getLocalDate(true, this.dateType);
+	var no_days = date.getLocalMonthDays(this.dateType);
+	// calendar voodoo for computing the first day that would actually be
+	// displayed in the calendar, even if it's from the previous month.
+	// WARNING: this is magic. ;-)
+	date.setLocalDate(true, this.dateType, 1);
+	var day1 = (date.getUTCDay() - this.firstDayOfWeek) % 7;
+	if (day1 < 0)
+		day1 += 7;
+	date.setLocalDate(true, this.dateType, -day1);
+	date.setLocalDate(true, this.dateType, date.getLocalDate(true, this.dateType) + 1);
 
 	var row = this.tbody.firstChild;
 	var MN = (this.dateType == 'jalali' ? Calendar._JSMN[month] : Calendar._SMN[month]);
@@ -1224,7 +1208,7 @@ Calendar.prototype._init = function (firstDayOfWeek, date) {
 		var hasdays = false, iday, dpos = ar_days[i] = [];
 		for (var j = 0; j < 7; ++j, cell = cell.nextSibling, date.setLocalDate(true, this.dateType, iday + 1)) {
 			iday = date.getLocalDate(true, this.dateType);
-			var wday = date.getDay();
+			var wday = date.getUTCDay();
 			cell.className = "day";
 			cell.pos = i << 4 | j;
 			dpos[j] = cell;
@@ -1910,7 +1894,7 @@ Date.prototype.getUTCDayOfYear = function() {
 /** Returns the number of day in the jalali year. */
 Date.prototype.getJalaliUTCDayOfYear = function() {
 	var now = new Date(Date.UTC(this.getUTCFullYear(), this.getUTCMonth(), this.getUTCDate(), 0, 0, 0));
-	var j = JalaliDate.jalaliToGregorian(this.getJalaliUTCFullYear(), 0, 1);
+	var j = JalaliDate.jalaliToGregorian(this.getJalaliUTCFullYear(), 1, 0);
 	var then = new Date(Date.UTC(j[0], j[1]-1, j[2], 0, 0, 0));
 	var time = now - then;
 	return Math.floor(time / Date.DAY);
@@ -1927,7 +1911,7 @@ Date.prototype.getLocalDayOfYear = function(dateType) {
 /** Returns the number of the week in year, as defined in ISO 8601. */
 Date.prototype.getUTCWeekNumber = function() {
 	var d = new Date(Date.UTC(this.getUTCFullYear(), this.getUTCMonth(), this.getUTCDate(), 0, 0, 0));
-	var DoW = d.getDay();
+	var DoW = d.getUTCDay();
 	d.setUTCDate(d.getUTCDate() - (DoW + 6) % 7 + 3); // Nearest Thu
 	var ms = d.valueOf(); // GMT
 	d.setUTCMonth(0);
@@ -1935,15 +1919,26 @@ Date.prototype.getUTCWeekNumber = function() {
 	return Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
 };
 
-/*
- * FIXME: getJalalliWeekNumber result may be incorrect.
- * Since I don't know what is the defination of week number in Jalali calendar and how it is computed,
- * I counldn't implement this function properly.
- * So, if you can help me on this subject, please let me know.
+/**
+ * Returns the number of the week in jalali year.
+ * 
+ * Note that the result of this function may be incorrect.
+ * I couldn't find the official defination of week number in Jalali calendar.
+ * I have implemented this function with the assumption that "the week that contains 
+ * the first Saturday of the year is the first week of that year."
+ * if you know any official defination, please let me know.
  */
-
 Date.prototype.getJalaliUTCWeekNumber = function() {
-	return Math.floor(this.getJalaliUTCDayOfYear() / 7) + 1;
+	var j = JalaliDate.jalaliToGregorian(this.getJalaliUTCFullYear(), 1, 1);
+	
+	//First Saturday of the year
+	var d = new Date(Date.UTC(j[0], j[1]-1, j[2], 0, 0, 0));
+	
+	//Number of days after the first Saturday of the year
+	var days = this.getJalaliUTCDayOfYear() - ((7 - d.getJalaliUTCDay()) % 7) - 1;
+	
+	if (days < 0) return new Date(this - this.getJalaliUTCDay()*Date.DAY).getJalaliUTCWeekNumber();
+	return Math.floor(days / 7) + 1;
 };
 
 
@@ -1982,7 +1977,7 @@ Date.prototype.print = function (str, dateType, useLangNumbers) {
 	var y = this.getLocalFullYear(true, dateType);
 	var wn = this.getLocalWeekNumber(true, dateType);
 	
-	var w = this.getDay();
+	var w = this.getUTCDay();
 	var s = {};
 	var hr = this.getUTCHours();
 	var pm = (hr >= 12);
@@ -2020,8 +2015,8 @@ Date.prototype.print = function (str, dateType, useLangNumbers) {
 	s["%t"] = "\t";		// a tab character
 	// FIXME: %T : the time in 24-hour notation (%H:%M:%S)
 	s["%U"] = s["%W"] = s["%V"] = (wn < 10) ? ("0" + wn) : wn;
-	s["%u"] = w + 1;	// the day of the week (range 1 to 7, 1 = MON)
-	s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
+	s["%u"] = this.getLocalDay(true, dateType) + 1;	// the day of the week (range 1 to 7, 1 = MON)
+	s["%w"] = this.getLocalDay(true, dateType);		// the day of the week (range 0 to 6, 0 = SUN)
 	// FIXME: %x : preferred date representation for the current locale without the time
 	// FIXME: %X : preferred time representation for the current locale without the date
 	s["%y"] = ('' + y).substr(2, 2); // year without the century (range 00 to 99)
@@ -2120,6 +2115,14 @@ Date.prototype.getLocalDate = function(UTC, dateType) {
  		return UTC ? this.getJalaliUTCDate() : this.getJalaliDate();
 	} else {
  		return UTC ? this.getUTCDate() : this.getDate();
+	}
+}
+
+Date.prototype.getLocalDay = function(UTC, dateType) {
+	if (dateType == 'jalali') {
+ 		return UTC ? this.getJalaliUTCDay() : this.getJalaliDay();
+	} else {
+ 		return UTC ? this.getUTCDay() : this.getDay();
 	}
 }
 

@@ -179,6 +179,12 @@ Date.prototype.getJalaliDate = function() {
 	return j[2];
 }
 
+Date.prototype.getJalaliDay = function() {
+	var day = this.getDay();
+	day = (day + 1) % 7;
+	return day;
+}
+
 
 /**
  * Jalali UTC functions 
@@ -250,4 +256,10 @@ Date.prototype.getJalaliUTCDate = function() {
 	var gy = this.getUTCFullYear();
 	var j = JalaliDate.gregorianToJalali(gy, gm+1, gd);
 	return j[2];
+}
+
+Date.prototype.getJalaliUTCDay = function() {
+	var day = this.getUTCDay();
+	day = (day + 1) % 7;
+	return day;
 }
