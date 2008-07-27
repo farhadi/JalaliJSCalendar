@@ -24,34 +24,35 @@
  *
  *  The "params" is a single object that can have the following properties:
  *
- *    prop. name   | description
+ *    prop. name      | description
  *  -------------------------------------------------------------------------------------------------
- *   inputField    | the ID of an input field to store the date
- *   displayArea   | the ID of a DIV or other element to show the date
- *   button        | ID of a button or other element that will trigger the calendar
- *   eventName     | event that will trigger the calendar, without the "on" prefix (default: "click")
- *   ifFormat      | date format that will be stored in the input field
- *   daFormat      | the date format that will be used to display the date in displayArea
- *   singleClick   | (true/false) wether the calendar is in single click mode or not (default: true)
- *   firstDay      | numeric: 0 to 6.  "0" means display Sunday first, "1" means display Monday first, etc.
- *   align         | alignment (default: "Br"); if you don't know what's this see the calendar documentation
- *   range         | array with 2 elements.  Default: [1900, 2999] -- the range of years available
- *   weekNumbers   | (true/false) if it's true (default) the calendar will display week numbers
- *   flat          | null or element ID; if not null the calendar will be a flat calendar having the parent with the given ID
- *   flatCallback  | function that receives a JS Date object and returns an URL to point the browser to (for flat calendar)
- *   disableFunc   | function that receives a JS Date object and should return true if that date has to be disabled in the calendar
- *   onSelect      | function that gets called when a date is selected.  You don't _have_ to supply this (the default is generally okay)
- *   onClose       | function that gets called when the calendar is closed.  [default]
- *   onUpdate      | function that gets called after the date is updated in the input field.  Receives a reference to the calendar.
- *   date          | the date that the calendar will be initially displayed to
- *   showsTime     | default: false; if true the calendar will include a time selector
- *   timeFormat    | the time format; can be "12" or "24", default is "12"
- *   electric      | if true (default) then given fields/date areas are updated for each move; otherwise they're updated only on close
- *   step          | configures the step of the years in drop-down boxes; default: 2
- *   position      | configures the calendar absolute position; default: null
- *   showOthers    | if "true" (but default: "false") it will show days from other months too
- *   dateType      | "gregorian" or "jalali" (default: "gregorian")
- *   langNumbers   | if "true" it will use number characters specified in language file. 
+ *   inputField       | the ID of an input field to store the date
+ *   displayArea      | the ID of a DIV or other element to show the date
+ *   button           | ID of a button or other element that will trigger the calendar
+ *   eventName        | event that will trigger the calendar, without the "on" prefix (default: "click")
+ *   ifFormat         | date format that will be stored in the input field
+ *   daFormat         | the date format that will be used to display the date in displayArea
+ *   singleClick      | (true/false) wether the calendar is in single click mode or not (default: true)
+ *   firstDay         | numeric: 0 to 6.  "0" means display Sunday first, "1" means display Monday first, etc.
+ *   align            | alignment (default: "Br"); if you don't know what's this see the calendar documentation
+ *   range            | array with 2 elements.  Default: [1900, 2999] -- the range of years available
+ *   weekNumbers      | (true/false) if it's true (default) the calendar will display week numbers
+ *   flat             | null or element ID; if not null the calendar will be a flat calendar having the parent with the given ID
+ *   flatCallback     | function that receives a JS Date object and returns an URL to point the browser to (for flat calendar)
+ *   disableFunc      | function that receives a JS Date object and should return true if that date has to be disabled in the calendar
+ *   onSelect         | function that gets called when a date is selected.  You don't _have_ to supply this (the default is generally okay)
+ *   onClose          | function that gets called when the calendar is closed.  [default]
+ *   onUpdate         | function that gets called after the date is updated in the input field.  Receives a reference to the calendar.
+ *   date             | the date that the calendar will be initially displayed to
+ *   showsTime        | default: false; if true the calendar will include a time selector
+ *   timeFormat       | the time format; can be "12" or "24", default is "12"
+ *   electric         | if true (default) then given fields/date areas are updated for each move; otherwise they're updated only on close
+ *   step             | configures the step of the years in drop-down boxes; default: 2
+ *   position         | configures the calendar absolute position; default: null
+ *   showOthers       | if "true" (but default: "false") it will show days from other months too
+ *   dateType         | "gregorian" or "jalali" (default: "gregorian")
+ *   langNumbers      | if "true" it will use number characters specified in language file. 
+ *   autoShowOnFocus  | if "true", popup calendars will also be shown when their input field gets focus
  *
  *  None of them is required, they all have default values.  However, if you
  *  pass none of "inputField", "displayArea" or "button" you'll get a warning
@@ -60,35 +61,36 @@
 Calendar.setup = function (params) {
 	function param_default(pname, def) { if (typeof params[pname] == "undefined") { params[pname] = def; } };
 
-	param_default("inputField",     null);
-	param_default("displayArea",    null);
-	param_default("button",         null);
-	param_default("eventName",      "click");
-	param_default("ifFormat",       "%Y/%m/%d");
-	param_default("daFormat",       "%Y/%m/%d");
-	param_default("singleClick",    true);
-	param_default("disableFunc",    null);
-	param_default("dateStatusFunc", params["disableFunc"]);	// takes precedence if both are defined
-	param_default("dateText",       null);
-	param_default("firstDay",       null);
-	param_default("align",          "Br");
-	param_default("range",          [1000, 3000]);
-	param_default("weekNumbers",    true);
-	param_default("flat",           null);
-	param_default("flatCallback",   null);
-	param_default("onSelect",       null);
-	param_default("onClose",        null);
-	param_default("onUpdate",       null);
-	param_default("date",           null);
-	param_default("showsTime",      false);
-	param_default("timeFormat",     "24");
-	param_default("electric",       true);
-	param_default("step",           2);
-	param_default("position",       null);
-	param_default("showOthers",     false);
-	param_default("multiple",       null);
-	param_default("dateType",       "gregorian");
-	param_default("langNumbers",   false);
+	param_default("inputField",      null);
+	param_default("displayArea",     null);
+	param_default("button",          null);
+	param_default("eventName",       "click");
+	param_default("ifFormat",        "%Y/%m/%d");
+	param_default("daFormat",        "%Y/%m/%d");
+	param_default("singleClick",     true);
+	param_default("disableFunc",     null);
+	param_default("dateStatusFunc",  params["disableFunc"]);	// takes precedence if both are defined
+	param_default("dateText",        null);
+	param_default("firstDay",        null);
+	param_default("align",           "Br");
+	param_default("range",           [1000, 3000]);
+	param_default("weekNumbers",     true);
+	param_default("flat",            null);
+	param_default("flatCallback",    null);
+	param_default("onSelect",        null);
+	param_default("onClose",         null);
+	param_default("onUpdate",        null);
+	param_default("date",            null);
+	param_default("showsTime",       false);
+	param_default("timeFormat",      "24");
+	param_default("electric",        true);
+	param_default("step",            2);
+	param_default("position",        null);
+	param_default("showOthers",      false);
+	param_default("multiple",        null);
+	param_default("dateType",        "gregorian");
+	param_default("langNumbers",     false);
+	param_default("autoShowOnFocus", false);
 
 	var tmp = ["inputField", "displayArea", "button"];
 	for (var i in tmp) {
@@ -189,6 +191,10 @@ Calendar.setup = function (params) {
 			cal.showAt(params.position[0], params.position[1]);
 		return false;
 	};
+	
+	if (params.autoShowOnFocus && params.inputField) {
+ 		params.inputField["onfocus"] = triggerEl["on" + params.eventName];
+ 	};
 
 	return cal;
 };

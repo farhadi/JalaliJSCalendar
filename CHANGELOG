@@ -1,3 +1,7 @@
+-------------------- 1.1.5 [2008-07-27] ---------------------
+2008-07-27	Ali Farhadi <ali@farhadi.ir>
+	* calendar-setup.js: new feature added to show popup calendars when their input field gets focus
+
 -------------------- 1.1 (Stable Release) [2008-07-11] ---------------------
 2008-07-11	Ali Farhadi <ali@farhadi.ir>
 	* calendar.js: Implementation of getJalaliUTCWeekNumber method corrected.
