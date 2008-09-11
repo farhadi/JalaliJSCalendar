@@ -51,6 +51,7 @@
  *   position         | configures the calendar absolute position; default: null
  *   showOthers       | if "true" (but default: "false") it will show days from other months too
  *   dateType         | "gregorian" or "jalali" (default: "gregorian")
+ *   ifDateType       | date type that will be stored in the input field (by default it is same as dateType)
  *   langNumbers      | if "true" it will use number characters specified in language file. 
  *   autoShowOnFocus  | if "true", popup calendars will also be shown when their input field gets focus
  *
@@ -89,6 +90,7 @@ Calendar.setup = function (params) {
 	param_default("showOthers",      false);
 	param_default("multiple",        null);
 	param_default("dateType",        "gregorian");
+	param_default("ifDateType",      null);
 	param_default("langNumbers",     false);
 	param_default("autoShowOnFocus", false);
 
@@ -107,7 +109,7 @@ Calendar.setup = function (params) {
 		var p = cal.params;
 		var update = (cal.dateClicked || p.electric);
 		if (update && p.inputField) {
-			p.inputField.value = cal.date.print(cal.dateFormat, cal.dateType, cal.langNumbers);
+			p.inputField.value = cal.date.print(cal.dateFormat, p.ifDateType || cal.dateType, cal.langNumbers);
 			if (typeof p.inputField.onchange == "function")
 				p.inputField.onchange();
 		}
@@ -146,7 +148,7 @@ Calendar.setup = function (params) {
 		}
 		cal.create(params.flat);
 		if (params.inputField && typeof params.inputField.value == "string") {
-			cal.parseDate(params.inputField.value, null, params.dateType);
+			cal.parseDate(params.inputField.value, null, params.ifDateType || cal.dateType);
 		}
 		cal.show();
 		return cal;
@@ -182,7 +184,8 @@ Calendar.setup = function (params) {
 	triggerEl["on" + params.eventName] = function() {
 		if (!cal.element) cal.create();
 		var dateEl = params.inputField || params.displayArea;
-		if (dateEl) params.date = Date.parseDate(dateEl.value || dateEl.innerHTML, cal.dateFormat, cal.dateType);
+		var dateType = params.inputField ? params.ifDateType || cal.dateType : cal.dateType;
+		if (dateEl) params.date = Date.parseDate(dateEl.value || dateEl.innerHTML, cal.dateFormat, dateType);
 		if (params.date) cal.setDate(params.date);
 		cal.refresh();
 		if (!params.position)

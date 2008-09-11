@@ -166,7 +166,7 @@ function setActiveStyleSheet(link, title) {
 			</script>
 		</div>
 		<div class="example">
-			Jalali Date Input (hidden input) : 
+			Jalali Date Input (hidden input with gregorian format) : 
 			<span id="display_area_2" style="cursor: pointer;" class="display_area">Click Here</span>
 			<form method="get" action="#">
 			<input id="date_input_8" type="hidden" name="date" />
@@ -177,6 +177,7 @@ function setActiveStyleSheet(link, title) {
 					displayArea    : "display_area_2",
 		       		ifFormat       : "%Y-%m-%d",       // format of the input field
 		       		dateType	   : 'jalali',
+		       		ifDateType	   : 'gregorian',
 		       		weekNumbers    : false
 				});
 			</script>

@@ -1,9 +1,15 @@
+-------------------- 1.2 [2008-09-11] ---------------------
+2008-09-11  Ali Farhadi <ali@farhadi.ir>
+	* calendar-setup.js: ability to set a different dateType for input field added.
+
+	* calendar.js: bug fixed in setDateType method.
+
 -------------------- 1.1.5 [2008-07-27] ---------------------
-2008-07-27	Ali Farhadi <ali@farhadi.ir>
+2008-07-27  Ali Farhadi <ali@farhadi.ir>
 	* calendar-setup.js: new feature added to show popup calendars when their input field gets focus
 
 -------------------- 1.1 (Stable Release) [2008-07-11] ---------------------
-2008-07-11	Ali Farhadi <ali@farhadi.ir>
+2008-07-11  Ali Farhadi <ali@farhadi.ir>
 	* calendar.js: Implementation of getJalaliUTCWeekNumber method corrected.
 	
 	* calendar.js: Bug fixed in getJalaliUTCDayOfYear method.

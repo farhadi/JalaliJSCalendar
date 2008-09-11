@@ -1,4 +1,4 @@
-/* JalaliJSCalendar v1.1 beta
+/* JalaliJSCalendar v1.2
  * Copyright (c) 2008 Ali Farhadi (http://farhadi.ir/)
  * 
  * Released under the terms of the GNU General Public License.
@@ -1027,7 +1027,7 @@ Calendar.prototype.setLangNumbers = function(langNumbers) {
 
 Calendar.prototype.setDateType = function(dateType) {
 	this.dateType = dateType;
-	this.refresh();
+	this.recreate();
 }
 
 Calendar.prototype.setShowsTime = function(showsTime) {
