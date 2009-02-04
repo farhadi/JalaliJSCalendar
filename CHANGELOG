@@ -1,3 +1,9 @@
+-------------------- 1.3 [2009-02-04] ---------------------
+2009-02-04  Ali Farhadi <ali@farhadi.ir>
+	* calendar-setup.js: ability to automatically fill input field and display area on initialize.
+
+	* calendar-setup.js: bug fixed in setting initial date value for calendar.
+
 -------------------- 1.2 [2008-09-11] ---------------------
 2008-09-11  Ali Farhadi <ali@farhadi.ir>
 	* calendar-setup.js: ability to set a different dateType for input field added.

@@ -1,4 +1,4 @@
-/* JalaliJSCalendar v1.2
+/* JalaliJSCalendar v1.3
  * Copyright (c) 2008 Ali Farhadi (http://farhadi.ir/)
  * 
  * Released under the terms of the GNU General Public License.
