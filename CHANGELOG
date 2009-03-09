@@ -1,3 +1,6 @@
+2009-03-09  Ali Farhadi <ali@farhadi.ir>
+	* calendar.js: applying patch from 'Sina Salek' fixing position bug in IE7
+
 -------------------- 1.3 [2009-02-04] ---------------------
 2009-02-04  Ali Farhadi <ali@farhadi.ir>
 	* calendar-setup.js: ability to automatically fill input field and display area on initialize.

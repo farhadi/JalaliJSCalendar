@@ -1479,7 +1479,9 @@ Calendar.prototype.showAtElement = function (el, opts) {
 		var br = Calendar.getAbsolutePos(cp);
 		document.body.removeChild(cp);
 		if (Calendar.is_ie) {
-			br.y += document.body.scrollTop;
+			br.y += typeof window.pageYOffset != 'undefined' ? window.pageYOffset : 
+				document.documentElement && document.documentElement.scrollTop ? document.documentElement.scrollTop : 
+				document.body.scrollTop ? document.body.scrollTop : 0;
 			br.x += document.body.scrollLeft;
 		} else {
 			br.y += window.scrollY;
