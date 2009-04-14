@@ -1,4 +1,4 @@
-/* JalaliJSCalendar v1.3
+/* JalaliJSCalendar v1.4
  * Copyright (c) 2008 Ali Farhadi (http://farhadi.ir/)
  * 
  * Released under the terms of the GNU General Public License.
@@ -582,7 +582,7 @@ Calendar.dayMouseOver = function(ev) {
 	}
 	if (el.navtype != 300) {
 		Calendar.addClass(el, "hilite");
-		if (el.caldate) {
+		if (el.caldate || el.navtype == 501) {
 			Calendar.addClass(el.parentNode, "rowhilite");
 		}
 	}
@@ -595,7 +595,7 @@ Calendar.dayMouseOut = function(ev) {
 		if (isRelated(el, ev) || _C || el.disabled)
 			return false;
 		removeClass(el, "hilite");
-		if (el.caldate)
+		if (el.caldate || el.navtype == 501)
 			removeClass(el.parentNode, "rowhilite");
 		if (el.calendar)
 			el.calendar.tooltips.innerHTML = _TT["SEL_DATE"];
@@ -700,6 +700,12 @@ Calendar.cellClick = function(el, ev) {
 			break;
 		    case 100:
 			cal.setFirstDayOfWeek(el.fdow);
+			return;
+		    case 500:
+			cal.toggleColumn(el.fdow);
+			return;
+		    case 501:
+			cal.toggleRow(el.weekIndex);
 			return;
 		    case 50:
 			var range = el._range;
@@ -843,11 +849,6 @@ Calendar.prototype.create = function (_par) {
 	}
 	for (var i = 7; i > 0; --i) {
 		cell = Calendar.createElement("td", row);
-		if (!i) {
-			cell.navtype = 100;
-			cell.calendar = this;
-			Calendar._add_evs(cell);
-		}
 	}
 	this.firstdayname = (this.weekNumbers) ? row.firstChild.nextSibling : row.firstChild;
 	this._displayWeekdays();
@@ -859,6 +860,13 @@ Calendar.prototype.create = function (_par) {
 		row = Calendar.createElement("tr", tbody);
 		if (this.weekNumbers) {
 			cell = Calendar.createElement("td", row);
+			if (this.multiple) {
+				cell.ttip = Calendar._TT["SELECT_ROW"];
+				cell.calendar = this;
+				cell.navtype = 501;
+				cell.weekIndex = 7-i;
+				Calendar._add_evs(cell);
+			}
 		}
 		for (var j = 7; j > 0; --j) {
 			cell = Calendar.createElement("td", row);
@@ -1010,30 +1018,80 @@ Calendar.prototype.recreate = function() {
 	} else this.create();
 }
 
+/** 
+ *  Toggles selection of one column which is specified in weekday (pass 0 for Sunday, 1 for Monday, etc.).
+ *  This method works only in multiple mode
+ */
+Calendar.prototype.toggleColumn = function(weekday) {
+	if (!this.multiple) return;
+	var col = (weekday+7 - this.firstDayOfWeek) % 7;
+	if (this.weekNumbers) col++;
+	var selected = true, nodes = [], cell;
+	for(var i=3; i < this.table.rows.length-1; i++) {
+		cell = this.table.rows[i].cells[col];
+		if (cell && cell.caldate && !cell.otherMonth) {
+			ds = cell.caldate.print("%Y%m%d", this.dateType, this.langNumbers);
+			if (!this.multiple[ds]) selected = false;
+			nodes[i] = !!this.multiple[ds];
+		}
+	}
+	for(i=3; i < this.table.rows.length; i++) {
+		cell = this.table.rows[i].cells[col];
+		if (cell && cell.caldate && !cell.otherMonth && (selected || !nodes[i])) this._toggleMultipleDate(cell.caldate);
+	}
+}
+
+/** 
+ *  Toggles selection of one row which is specified in row (starts from 1).
+ *  This method works only in multiple mode
+ */
+Calendar.prototype.toggleRow = function(row) {
+	if (!this.multiple) return;
+	var cells = this.table.rows[row+2].cells;
+	var selected = true, nodes = [];
+	for(var i=0; i < cells.length; i++) {
+		if (cells[i].caldate && !cells[i].otherMonth) {
+			ds = cells[i].caldate.print("%Y%m%d", this.dateType, this.langNumbers);
+			if (!this.multiple[ds]) selected = false;
+			nodes[i] = !!this.multiple[ds];
+		}
+	}
+	for(i=0; i < cells.length; i++) {
+		if (cells[i].caldate && !cells[i].otherMonth && (selected || !nodes[i])) this._toggleMultipleDate(cells[i].caldate);
+	}
+}
+
+/** Dynamically changes weekNumbers property */
 Calendar.prototype.setWeekNumbers = function(weekNumbers) {
 	this.weekNumbers = weekNumbers;
 	this.recreate();
 }
 
+/** Dynamically changes showsOtherMonths property */
 Calendar.prototype.setOtherMonths = function(showsOtherMonths) {
 	this.showsOtherMonths = showsOtherMonths;
 	this.refresh();
 }
 
+/** Dynamically changes langNumbers property */
 Calendar.prototype.setLangNumbers = function(langNumbers) {
 	this.langNumbers = langNumbers;
 	this.refresh();
 }
 
+/** Dynamically changes dateType property */
 Calendar.prototype.setDateType = function(dateType) {
 	this.dateType = dateType;
 	this.recreate();
 }
 
+/** Dynamically changes showsTime property */
 Calendar.prototype.setShowsTime = function(showsTime) {
 	this.showsTime = showsTime;
 	this.recreate();
 }
+
+/** Dynamically changes time24 property */
 Calendar.prototype.setTime24 = function(time24) {
 	this.time24 = time24;
 	this.recreate();
@@ -1331,7 +1389,7 @@ Calendar.prototype.refresh = function () {
 	} else this.create(); 
 };
 
-/** Modifies the "firstDayOfWeek" parameter (pass 0 for Synday, 1 for Monday, etc.). */
+/** Modifies the "firstDayOfWeek" parameter (pass 0 for Sunday, 1 for Monday, etc.). */
 Calendar.prototype.setFirstDayOfWeek = function (firstDayOfWeek) {
 	this._init(firstDayOfWeek, this.date);
 	this._displayWeekdays();
@@ -1615,9 +1673,9 @@ Calendar.prototype._displayWeekdays = function () {
 	for (var i = 0; i < 7; ++i) {
 		cell.className = "day name";
 		var realday = (i + fdow) % 7;
-		if (i) {
-			cell.ttip = Calendar._TT["DAY_FIRST"].replace("%s", Calendar._DN[realday]);
-			cell.navtype = 100;
+		if (i || this.multiple) {
+			cell.ttip = (this.multiple ? Calendar._TT["SELECT_COLUMN"] : Calendar._TT["DAY_FIRST"]).replace("%s", Calendar._DN[realday]);
+			cell.navtype = this.multiple ? 500 : 100;
 			cell.calendar = this;
 			cell.fdow = realday;
 			Calendar._add_evs(cell);

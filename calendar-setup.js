@@ -1,5 +1,5 @@
 /* JalaliJSCalendar - Setup Script
- * Copyright (c) 2008 Ali Farhadi (http://farhadi.ir/)
+ * Copyright (c) 2008-2009 Ali Farhadi (http://farhadi.ir/)
  * 
  * Released under the terms of the GNU General Public License.
  * See the GPL for details (http://www.gnu.org/licenses/gpl.html).
@@ -134,7 +134,13 @@ Calendar.setup = function (params) {
 			cal.callCloseHandler();
 	};
 
-	if (params.flat != null) {
+	if (!params.flat) {
+		var cal = new Calendar(params.firstDay,
+									params.date,
+									params.onSelect || onSelect,
+									params.onClose || function(cal) { cal.hide(); });
+
+	} else {
 		if (typeof params.flat == "string")
 			params.flat = document.getElementById(params.flat);
 		if (!params.flat) {
@@ -142,32 +148,11 @@ Calendar.setup = function (params) {
 			return false;
 		}
 		var cal = new Calendar(params.firstDay, params.date, params.onSelect || onSelect);
-		cal.showsOtherMonths = params.showOthers;
-		cal.showsTime = params.showsTime;
-		cal.time24 = (params.timeFormat == "24");
-		cal.params = params;
-		cal.weekNumbers = params.weekNumbers;
-		cal.setRange(params.range[0], params.range[1]);
-		cal.setDateStatusHandler(params.dateStatusFunc);
-		cal.getDateText = params.dateText;
-		cal.dateType = params.dateType;
-		cal.langNumbers = params.langNumbers;
-		if (params.ifFormat) {
-			cal.setDateFormat(params.ifFormat);
-		}
-		cal.create(params.flat);
+
 		if (params.inputField && typeof params.inputField.value == "string" && params.inputField.value) {
 			cal.parseDate(params.inputField.value, null, params.ifDateType || cal.dateType);
 		}
-		cal.show();
-		return cal;
 	}
-	
-	var cal = new Calendar(params.firstDay,
-							     params.date,
-							     params.onSelect || onSelect,
-							     params.onClose || function(cal) { cal.hide(); });
-
 	cal.showsTime = params.showsTime;
 	cal.time24 = (params.timeFormat == "24");
 	cal.weekNumbers = params.weekNumbers;
@@ -181,32 +166,36 @@ Calendar.setup = function (params) {
 	cal.getDateText = params.dateText;
 	cal.setDateFormat(params.inputField ? params.ifFormat : params.daFormat);
 	if (params.multiple) {
-			cal.multiple = {};
-			for (var i = params.multiple.length; --i >= 0;) {
-				var d = params.multiple[i];
-				var ds = d.print("%Y%m%d", cal.dateType, cal.langNumbers);
-				cal.multiple[ds] = d;
-			}
+		cal.multiple = {};
+		for (var i = params.multiple.length; --i >= 0;) {
+			var d = params.multiple[i];
+			var ds = d.print("%Y%m%d", cal.dateType, cal.langNumbers);
+			cal.multiple[ds] = d;
 		}
-		
-	var triggerEl = params.button || params.displayArea || params.inputField;
-	triggerEl["on" + params.eventName] = function() {
-		if (!cal.element) cal.create();
-		var dateEl = params.inputField || params.displayArea;
-		var dateType = params.inputField ? params.ifDateType || cal.dateType : cal.dateType;
-		if (dateEl && (dateEl.value || dateEl.innerHTML)) params.date = Date.parseDate(dateEl.value || dateEl.innerHTML, cal.dateFormat, dateType);
-		if (params.date) cal.setDate(params.date);
-		cal.refresh();
-		if (!params.position)
-			cal.showAtElement(params.button || params.displayArea || params.inputField, params.align);
-		else
-			cal.showAt(params.position[0], params.position[1]);
-		return false;
-	};
+	}
 	
-	if (params.autoShowOnFocus && params.inputField) {
- 		params.inputField["onfocus"] = triggerEl["on" + params.eventName];
- 	};
+	if (!params.flat) {
+		var triggerEl = params.button || params.displayArea || params.inputField;
+		triggerEl["on" + params.eventName] = function() {
+			if (!cal.element) cal.create();
+			var dateEl = params.inputField || params.displayArea;
+			var dateType = params.inputField ? params.ifDateType || cal.dateType : cal.dateType;
+			if (dateEl && (dateEl.value || dateEl.innerHTML)) params.date = Date.parseDate(dateEl.value || dateEl.innerHTML, cal.dateFormat, dateType);
+			if (params.date) cal.setDate(params.date);
+			cal.refresh();
+			if (!params.position)
+				cal.showAtElement(params.button || params.displayArea || params.inputField, params.align);
+			else
+				cal.showAt(params.position[0], params.position[1]);
+			return false;
+		};
 
+		if (params.autoShowOnFocus && params.inputField) {
+			params.inputField["onfocus"] = triggerEl["on" + params.eventName];
+		};
+	} else {
+		cal.create(params.flat);
+		cal.show();
+	}
 	return cal;
 };

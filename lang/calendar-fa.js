@@ -144,6 +144,9 @@ Calendar._TT["PART_TODAY"] = " (امروز)";
 // %s will be replaced with the day name.
 Calendar._TT["DAY_FIRST"] = "ابتدا %s نمایش داده شود";
 
+Calendar._TT["SELECT_COLUMN"] = "انتخاب تمام %s‌های این ماه";
+Calendar._TT["SELECT_ROW"] = "انتخاب روزهای این هفته";
+
 // This may be locale-dependent.  It specifies the week-end days, as an array
 // of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
 // means Monday, etc.
