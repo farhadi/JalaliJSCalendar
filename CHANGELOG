@@ -1,3 +1,8 @@
+2009-04-16  Ali Farhadi <ali@farhadi.ir>
+	* calendar-setup.js,calendar.js: Fixing bug in flat-multiple mode (reported by Emil Sedgh)
+	* calendar-setup.js,calendar.js: No need to hide calendar manually when using onClose.
+		It will be closed based on value returned by onClose handler.
+	 
 -------------------- 1.4 [2009-04-15] ---------------------
 2009-04-15  Ali Farhadi <ali@farhadi.ir>
 	* calendar-setup.js: Applying patch from 'Emil Sedgh' fixing some bugs.

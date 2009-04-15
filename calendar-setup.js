@@ -130,7 +130,7 @@ Calendar.setup = function (params) {
 			if (typeof p.flatCallback == "function")
 				p.flatCallback(cal);
 		}
-		if (update && p.singleClick && cal.dateClicked)
+		if (update && p.singleClick && cal.dateClicked && !cal.multiple && !p.flat)
 			cal.callCloseHandler();
 	};
 
@@ -138,7 +138,7 @@ Calendar.setup = function (params) {
 		var cal = new Calendar(params.firstDay,
 									params.date,
 									params.onSelect || onSelect,
-									params.onClose || function(cal) { cal.hide(); });
+									params.onClose);
 
 	} else {
 		if (typeof params.flat == "string")

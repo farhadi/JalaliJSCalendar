@@ -738,7 +738,7 @@ Calendar.cellClick = function(el, ev) {
 		} else if (el.navtype == 0)
 			newdate = closing = true;
 	}
-	if (newdate) {
+	if (newdate || (cal.multiple && !el.disabled)) {
 		ev && cal.callHandler();
 	}
 	if (closing) {
@@ -1421,8 +1421,8 @@ Calendar.prototype.callHandler = function () {
 /** Calls the second user handler (closeHandler). */
 Calendar.prototype.callCloseHandler = function () {
 	if (this.onClose) {
-		this.onClose(this);
-	}
+		if (this.onClose(this)) this.hide();
+	} else this.hide();
 	this.hideShowCovered();
 };
 
