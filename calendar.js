@@ -703,10 +703,10 @@ Calendar.cellClick = function(el, ev) {
 			return;
 		    case 500:
 			cal.toggleColumn(el.fdow);
-			return;
+			break;
 		    case 501:
 			cal.toggleRow(el.weekIndex);
-			return;
+			break;
 		    case 50:
 			var range = el._range;
 			var current = el.innerHTML.toEnglish();
