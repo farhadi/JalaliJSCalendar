@@ -1029,7 +1029,7 @@ Calendar.prototype.toggleColumn = function(weekday) {
 	var selected = true, nodes = [], cell;
 	for(var i=3; i < this.table.rows.length-1; i++) {
 		cell = this.table.rows[i].cells[col];
-		if (cell && cell.caldate && !cell.otherMonth) {
+		if (cell && cell.caldate && !cell.otherMonth && !cell.disabled) {
 			ds = cell.caldate.print("%Y%m%d", this.dateType, this.langNumbers);
 			if (!this.multiple[ds]) selected = false;
 			nodes[i] = !!this.multiple[ds];
@@ -1037,7 +1037,7 @@ Calendar.prototype.toggleColumn = function(weekday) {
 	}
 	for(i=3; i < this.table.rows.length; i++) {
 		cell = this.table.rows[i].cells[col];
-		if (cell && cell.caldate && !cell.otherMonth && (selected || !nodes[i])) this._toggleMultipleDate(cell.caldate);
+		if (cell && cell.caldate && !cell.otherMonth && !cell.disabled && (selected || !nodes[i])) this._toggleMultipleDate(cell.caldate);
 	}
 }
 
@@ -1050,14 +1050,14 @@ Calendar.prototype.toggleRow = function(row) {
 	var cells = this.table.rows[row+2].cells;
 	var selected = true, nodes = [];
 	for(var i=0; i < cells.length; i++) {
-		if (cells[i].caldate && !cells[i].otherMonth) {
+		if (cells[i].caldate && !cells[i].otherMonth && !cells[i].disabled) {
 			ds = cells[i].caldate.print("%Y%m%d", this.dateType, this.langNumbers);
 			if (!this.multiple[ds]) selected = false;
 			nodes[i] = !!this.multiple[ds];
 		}
 	}
 	for(i=0; i < cells.length; i++) {
-		if (cells[i].caldate && !cells[i].otherMonth && (selected || !nodes[i])) this._toggleMultipleDate(cells[i].caldate);
+		if (cells[i].caldate && !cells[i].otherMonth && !cells[i].disabled && (selected || !nodes[i])) this._toggleMultipleDate(cells[i].caldate);
 	}
 }
 

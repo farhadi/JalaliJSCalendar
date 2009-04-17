@@ -56,6 +56,11 @@ function setActiveStyleSheet(link, title) {
 #flat_calendar_1, #flat_calendar_2{
 	width: 200px;
 }
+
+#flat_calendar_3{
+	width: 230px;
+}
+
 .example {
 	padding: 10px;
 }
@@ -166,6 +171,31 @@ function setActiveStyleSheet(link, title) {
 			</script>
 		</div>
 		<div class="example">
+			Jalali Date Input with disabled dates : 
+			<input id="date_input_11" type="text" /><img id="date_btn_11" src="cal.png" style="vertical-align: top;" />
+			<script type="text/javascript">
+				// A function that receives a Date object and returns a boolean or a string.
+				// This function allows one to set a certain CSS class to some date, therefore making it look different.
+				// If it returns true then the date will be disabled. If it returns false nothing special happens with the given date.
+				// If it returns a string then that will be taken as a CSS class and appended to the date element.
+				// If this string is 'disabled' then the date is also disabled (therefore is like returning true).
+				// Note that it receives the date object as well as separate values of year, month and date, for your confort.
+				function getDateStatus(date, y, m, d) {
+					if (d % 3)
+						return false;
+					else return 'disabled';
+				}
+				Calendar.setup({
+					inputField		: "date_input_11",   // id of the input field
+					button			: "date_btn_11",   // trigger for the calendar (button ID)
+		       		ifFormat		: "%Y/%m/%d",       // format of the input field
+        			dateType		: 'jalali',
+        			dateStatusFunc	: getDateStatus,
+					weekNumbers		: true
+				});
+			</script>
+		</div>
+		<div class="example">
 			Jalali Date Input (hidden input with gregorian format) : 
 			<span id="display_area_2" style="cursor: pointer;" class="display_area">Click Here</span>
 			<form method="get" action="#">
@@ -247,7 +277,6 @@ function setActiveStyleSheet(link, title) {
           MA[MA.length] = d;
         }
       }
-      cal.hide();
       return true;
     };
 
@@ -292,6 +321,35 @@ function setActiveStyleSheet(link, title) {
         			dateType	 : 'jalali',
         			flatCallback : dateChanged,
         			weekNumbers    : false 
+				});
+			</script>
+		</div>
+		<div class="example">
+			Flat Jalali Calendar (multiple select) : <br />
+			<div id="flat_calendar_3"></div>
+			<div id="output_2"></div>
+			<script type="text/javascript">
+				function doSomething(cal) {
+					var el = document.getElementById("output_2");
+
+					el.innerHTML = "";
+					
+					// walk the calendar's multiple dates selection hash
+					for (var i in cal.multiple) {
+						var d = cal.multiple[i];
+						// sometimes the date is not actually selected, that's why we need to check.
+						if (d instanceof Date) {
+							// OK, selected.  Fill an input field.  Or something.  Just for example,
+							// we will display all selected dates in the element having the id "output".
+							el.innerHTML += d.print("%A, %e %B %Y", 'jalali', true) + "<br />";
+					  }
+					}
+				}
+				cal = Calendar.setup({
+					flat         : "flat_calendar_3",   // id of the input field
+        			dateType	 : 'jalali',
+        			multiple     : [],
+        		    onSelect     : doSomething
 				});
 			</script>
 		</div>
