@@ -1422,7 +1422,9 @@ Calendar.prototype.callHandler = function () {
 Calendar.prototype.callCloseHandler = function () {
 	if (this.onClose) {
 		if (this.onClose(this)) this.hide();
-	} else this.hide();
+	} else if (this.isPopup) {
+		this.hide();
+	}
 	this.hideShowCovered();
 };
 
