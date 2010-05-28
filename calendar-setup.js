@@ -169,7 +169,7 @@ Calendar.setup = function (params) {
 		cal.multiple = {};
 		for (var i = params.multiple.length; --i >= 0;) {
 			var d = params.multiple[i];
-			var ds = d.print("%Y%m%d", cal.dateType, cal.langNumbers);
+			var ds = d.print("%Y%m%d", cal.dateType);
 			cal.multiple[ds] = d;
 		}
 	}

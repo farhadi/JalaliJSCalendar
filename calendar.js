@@ -1030,7 +1030,7 @@ Calendar.prototype.toggleColumn = function(weekday) {
 	for(var i=3; i < this.table.rows.length-1; i++) {
 		cell = this.table.rows[i].cells[col];
 		if (cell && cell.caldate && !cell.otherMonth && !cell.disabled) {
-			ds = cell.caldate.print("%Y%m%d", this.dateType, this.langNumbers);
+			ds = cell.caldate.print("%Y%m%d", this.dateType);
 			if (!this.multiple[ds]) selected = false;
 			nodes[i] = !!this.multiple[ds];
 		}
@@ -1051,7 +1051,7 @@ Calendar.prototype.toggleRow = function(row) {
 	var selected = true, nodes = [];
 	for(var i=0; i < cells.length; i++) {
 		if (cells[i].caldate && !cells[i].otherMonth && !cells[i].disabled) {
-			ds = cells[i].caldate.print("%Y%m%d", this.dateType, this.langNumbers);
+			ds = cells[i].caldate.print("%Y%m%d", this.dateType);
 			if (!this.multiple[ds]) selected = false;
 			nodes[i] = !!this.multiple[ds];
 		}
@@ -1288,7 +1288,7 @@ Calendar.prototype._init = function (firstDayOfWeek, date) {
 			cell.disabled = false;
 			cell.innerHTML = this.getDateText ? this.getDateText(date, iday) : this.convertNumbers(iday);
 			if (dates)
-				dates[date.print("%Y%m%d", this.dateType, this.langNumbers)] = cell;
+				dates[date.print("%Y%m%d", this.dateType)] = cell;
 			if (this.getDateStatus) {
 				var status = this.getDateStatus(date, year, month, iday);
 				if (this.getDateToolTip) {
@@ -1347,7 +1347,7 @@ Calendar.prototype._initMultipleDates = function() {
 
 Calendar.prototype._toggleMultipleDate = function(date) {
 	if (this.multiple) {
-		var ds = date.print("%Y%m%d", this.dateType, this.langNumbers);
+		var ds = date.print("%Y%m%d", this.dateType);
 		var cell = this.datesCells[ds];
 		if (cell) {
 			var d = this.multiple[ds];
