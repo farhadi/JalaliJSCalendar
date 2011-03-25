@@ -193,6 +193,11 @@ Calendar.setup = function (params) {
 		if (params.autoShowOnFocus && params.inputField) {
 			params.inputField["onfocus"] = triggerEl["on" + params.eventName];
 		};
+
+		var dateEl = params.inputField || params.displayArea;
+		var dateType = params.inputField ? params.ifDateType || cal.dateType : cal.dateType;
+		if (dateEl && (dateEl.value || dateEl.innerHTML)) params.date = Date.parseDate(dateEl.value || dateEl.innerHTML, cal.dateFormat, dateType);
+		if (params.date) cal.setDate(params.date);
 	} else {
 		cal.create(params.flat);
 		cal.show();
