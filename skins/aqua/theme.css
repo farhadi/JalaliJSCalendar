@@ -5,7 +5,10 @@
 
 /* The main calendar widget.  DIV containing a table. */
 
-div.calendar { position: relative; }
+div.calendar {
+   position: relative;
+   z-index: 2500;
+}
 
 .calendar, .calendar table {
   border: 1px solid #bdb2bf;
